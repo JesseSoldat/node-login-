@@ -16,6 +16,7 @@ mongoose.connect('mongodb://localhost/loginapp');
 var db = mongoose.connection;
 
 var routes = require('./routes/index');
+var users = require('./routes/users');
 
 var app = express();
 
@@ -37,10 +38,30 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Express Validator
+app.use(expressValidator({
+  errorFormatter: function(param, msg, value) {
+      var namespace = param.split('.')
+      , root    = namespace.shift()
+      , formParam = root;
+
+    while(namespace.length) {
+      formParam += '[' + namespace.shift() + ']';
+    }
+    return {
+      param : formParam,
+      msg   : msg,
+      value : value
+    };
+  }
+}));
+
+
 
 app.use(flash());
 
 app.use('/', routes);
+app.use('/users', users)
 
 app.set('port', (process.env.PORT || 3000));
 

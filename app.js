@@ -15,6 +15,8 @@ mongoose.connect('mongodb://localhost/loginapp');
 
 var db = mongoose.connection;
 
+var routes = require('./routes/index');
+
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
@@ -38,6 +40,7 @@ app.use(passport.session());
 
 app.use(flash());
 
+app.use('/', routes);
 
 app.set('port', (process.env.PORT || 3000));
 

@@ -34,7 +34,7 @@ router.post('/register', function(req, res){
 
 	if(errors){
 		console.log(errors);
-		
+
 		res.render('register', {errors: errors});
 	} else {
 		var newUser = new User({
@@ -53,7 +53,48 @@ router.post('/register', function(req, res){
 		console.log('Success');
 		res.redirect('/users/login');
 	}
-})
+});
+
+passport.use(new LocalStrategy(function(username, password, done){
+	console.log(username);
+	User.getUserByUsername(username, function(err, user){
+		if(err) throw err;
+		if(!user){
+			return done(null, false, {
+				message: 'Unknown User'
+			});
+		}
+	User.comparePassword(password, user.password, function(err, isMatch){
+		if(err) throw err;
+		if(isMatch){
+			return done(null, user);
+		} else {
+			return done(null, false, {message: 'Invalid Password'});
+		}
+	});
+	});
+}));
+
+
+passport.serializeUser(function(user, done) {
+  done(null, user.id);
+});
+
+passport.deserializeUser(function(id, done) {
+  User.getUserById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+router.post('/login', 
+	passport.authenticate('local', {
+	successRedirect: '/',
+	failureRedirect: '/users/login',
+	failureFlash: true
+	}),
+function(req, res) {
+	res.redirect('/');
+});
 
 
 

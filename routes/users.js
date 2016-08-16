@@ -34,7 +34,8 @@ router.post('/register', function(req, res){
 
 	if(errors){
 		console.log(errors);
-		res.render('register', {errors: errrors});
+		
+		res.render('register', {errors: errors});
 	} else {
 		var newUser = new User({
 			name: name,
@@ -46,6 +47,9 @@ router.post('/register', function(req, res){
 			if(err) throw err;
 			console.log(user);
 		});
+
+		req.flash('success_msg', 'You are registered and can now login');
+
 		console.log('Success');
 		res.redirect('/users/login');
 	}

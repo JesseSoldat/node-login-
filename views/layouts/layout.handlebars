@@ -6,13 +6,19 @@
 	<link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
+<div class="container">
 	<div class="header clearfix">
 		<nav>
 			<ul class="nav nav-pills pull-right">
+			{{#if user}}
 				<li><a href="/">Dashboard</a></li>
+				<li><a href="/users/logout">Logout</a></li>
+
+			{{else}}
 				<li><a href="/users/login">Login</a></li>
 				<li><a href="/users/register">Register</a></li>
-				<li><a href="/users/logout">Logout</a></li>
+
+			{{/if}}
 			</ul>
 		</nav>
 	</div>
@@ -43,5 +49,6 @@
 	<footer class="footer">
 		<p>&copy; 2016 LoginApp, Inc.</p>
 	</footer>
+</div>
 </body>
 </html>
